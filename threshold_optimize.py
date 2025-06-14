@@ -1,7 +1,21 @@
+import pickle
+import pandas as pd
+import numpy as np
+from itertools import product
+from sklearn.metrics import (
+    cohen_kappa_score,
+    precision_score,
+    recall_score,
+    fbeta_score,
+    hamming_loss as sk_hamming_loss,
+    accuracy_score,
+    jaccard_score
+)
+from sklearn.model_selection import StratifiedShuffleSplit
+
 """
 This script defines all necessary functions for the optimization procedure:
     
-    ***see requirements file for python necessary packages***
     ***handles a user-defined array of thresholds to scan***
     ***handles a user-defined list of dictionaries for hyperparams, if needed***
     
