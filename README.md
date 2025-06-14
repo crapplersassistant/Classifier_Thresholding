@@ -37,5 +37,5 @@ $Recall(t) = \frac{TP_t}{TP_t + FN_t} \tag{2}$
 While one might propose threshold optimization and recalibration that imposes tolerances to achieve professional expectations of the above metrics individually, there is an established scoring metric that combines both into a single score, the *F-measure*. The harmonic mean between sensitivity and precision bounded between zero and one.  This measure can be modified by a positive integer weighting factor, *beta* (3), where a weight greater than one favors sensitivity and a weight less than one favors precision[12].   When an F-measure's beta equals one, it indicates a perfect balance between these metrics(4-6).
 
 
-![F-beta score formula](./images/fbeta_formula.png)
+![F-beta score formula]()
 
