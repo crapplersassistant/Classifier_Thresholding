@@ -68,6 +68,21 @@ Exactly when it is appropriate to recalibrate the prediction threshold should be
 
 **Recalibration Trigger Algorithm.** We define several variables.  Delta, lambda, epsilon, gamma, and sigma are user-defined acceptable performance parameters, a lookback window and its size, respectively.  For some data, Dx, we compute evaluation metrics, mx, and assess whether Dx performance is sub-optimal.  If so, we check whether the percent change in recall from Dx-1 is greater than our performance tolerance, delta. If true, we run the Threshold Optimization algorithm. 
 
+#### Results:
+![optimization](Images/BP_metrics_frequencies.png)
+
+**Performance of threshold optimization on the validation set for each blood-product:** PRBC, FFP, and PLAT.  The bottom subplots display the log(prediction probabilities) colored by positive and negative outcomes for each blood-product.  Vertical lines denote the optimal threshold obtained for three scoring metrics – F-beta, kappa (cohen’s kappa), and accuracy.  PRBC obtained optimal thresholding for f-beta, Cohen’s kappa, and accuracy at 0.15, 0.33, and 0.52, respectively.  FFP obtained optimal thresholding for f-beta, Cohen’s kappa, and accuracy at 0.17, 0.22, and 0.65, respectively.  PLAT obtained optimal thresholding for f-beta, Cohen’s kappa, and accuracy at 0.18, 0.18, and 0.58, respectively.
+
+a.)
+![test dynamic S](Images/Sensitivity_PRBC.png)
+b.)
+![test dynamic P](Images/PPV_PRBC.png)
+
+**Time-series plot of PRBC metrics** – Sensitivity (a) and Precision (b).  Each plot is composed of subplots denoting the validation set (A subplot) and test set (B subplot).  Metrics are calculated on a monthly basis for MSBOS, Clinician recommendation, Static (OT), and Dynamic (DOT). 
+
+![results table](/Images/PRBC_table.png)
+
+**Test data for PRBC calibration.**  Each month is denoted as an event of either evaluation (E) or recalibration (R) where recalibrations are highlighted in red.  In November and December case counts were low enough to trigger our lookback window and recalibration to 0.03 which enabled identification of a PRBC transfusion otherwise undetected at a threshold of 0.11. 
 
 **REFERENCES** 
 
