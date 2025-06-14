@@ -52,3 +52,13 @@ $accuracy(t) = \frac{TP_t + TN_t}{TP_t + TN_t + FP_t + FN_t}$
 Analogous to GHOST and alluded to above, **APTCID** performs a bootstrap stratified sampling...it follows that our objective function selects the threshold that maximizes the median Recall weighted *F-measure*. 
 
 ![objective function](max_med_fbeta.jpg)
+
+![Threshold Optimization]()
+
+**Pseudocode for a Generalized Threshold Optimization Procedure.**  First, we define our inputs.  The prediction probability ($p_p$), predicted outcome ($T_p$), and actual outcome ($T_a$) variables are used to generate random stratified subsets from the data.  Subsets are scanned across thresholds and clinical metrics, $CM_t$, are calculated for each threshold.  We choose the topt from the maximum median F-beta score.
+
+As proof-of-concept, we apply APTCID to the test set.  Test is a six-month window following the validation set.  The data is split into equal time intervals based on the datetime of the surgical cases.  This approach provides a reasonable proxy for detecting temporal performance shift, sub-population drift, and change in class IR.  Data streams are dynamic, and one would be reasoned to suspect that in a large enough system one time interval’s data may look entirely different from the next.  Our trigger algorithm accommodates this eventuality by exploiting a lookback window.  Suppose a hypothetical timespan where data is sparce – few surgeries were performed.  A lookback window does exactly what its name suggests.  To maintain performance if the model’s performance decays in a sparce interval, we automatically enlarge the case aperture using cases from a previous interval.  We look back in time to perform threshold optimization.  This choice ensures that our prediction threshold is based on sufficiently large sample sizes and tailored to the most recent case trends. 
+
+Exactly when it is appropriate to recalibrate the prediction threshold should be driven by clinical professionals.  Just to reiterate, the first concern is model safety and preserving patient health and well-being.  The recalibration algorithm enables user-defined cut-off values for the model’s recall performance, and we can guide the recalibration empirically using a performance tolerance measure.  Simply put, tolerance is the tolerable percent change in performance from one interval to the next.  For this study’s proof of concept, we set this tolerance to 0.01 and restrict its use to scenarios where the difference is negative indicating a performance drop from intervalt to intervalt+1.  After the threshold has been optimized for performance, we move on to the next interval using the new threshold for prediction. 
+
+![]()
