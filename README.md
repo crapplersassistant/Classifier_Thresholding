@@ -12,7 +12,30 @@ Schematics describing the process of threshold optimization and recalibration.
 -   **Step V** Monitor the performance over time for decay, and if decay is detected, the process repeats from step II.
 
 #### Review Evaluation Metrics (in context)
-*Classifiers* output a probability of an outcome $T_a \forall{a}$, and a decision threshold establishes the predicted outcome.  Comparison of predicted outcome to actual outcome is fundamental to model assessment and the basis for evaluation metrics.  We derive these metrics – precision, recall, specificity, accuracy, etc. – from the confusion matrix (Figure 1, step III).   As it was alluded to in the introduction, there has been robust reporting in the literature pertaining to the choice of appropriate model evaluation metrics[8-11].  These works highlight common themes encountered in ML evaluation: inevitable changes in class or outcome distributions, non-constant class imbalance ratios, and the importance of goal-driven metrics. 
+*Classifiers* output a probability of an outcome...
 
-Our requirements for model performance are based on the real-world scenario important to clinical outcomes, i.e. goal-driven metrics.  Because Smart Match provides physicians with recommendations for blood-product requirements during surgery, the first consideration is the health and welfare of the patient.  The second consideration is toward improving the healthcare delivery system – resource allocation and management.  Taking the primary and secondary concerns together, we sought to minimize patient danger, false negative recommendations, while balancing this with an acceptable loss in resources, and false positive recommendations.  Thus, the clinical team behind Smart Match chose to track model precision (1) and recall (2) during deployment.   
+
+*Decision threshold* establishes the predicted outcome....
+$\mathcal{T_a}, \forall{a} \in \mathbb{R} = [0,1]$
+
+Comparison of predicted outcome to actual outcome is fundamental to model assessment and the basis for evaluation metrics.  We derive these metrics – precision (1), recall (2), accuracy (3), etc. – from the confusion matrix (Figure 1, step III).   
+
+|   	|act  |   	|
+|---	|---	|---	|
+|pred | TP	| FP	|
+|   	| FN	| TN	|
+
+As it was alluded to in the introduction, there has been robust reporting in the literature pertaining to the choice of appropriate model evaluation metrics[8-11].  These works highlight common themes encountered in ML evaluation: inevitable changes in class or outcome distributions, non-constant class imbalance ratios, and the importance of goal-driven metrics. 
+
+Our requirements for model performance are based on the real-world scenario important to clinical outcomes, i.e. goal-driven metrics. Two concerns: primary - minimize false negatives (*FN*), secondary - maintaining an acceptable level of false positives (*FP*). Thus, we chose to track model *precision* (1) and *recall* (2) during deployment.
+
+
+$Precision(t) = \frac{TP_t}{TP_t + FP_t} \tag{1}$
+
+$Recall(t) = \frac{TP_t}{TP_t + FN_t} \tag{2}$
+
+While one might propose threshold optimization and recalibration that imposes tolerances to achieve professional expectations of the above metrics individually, there is an established scoring metric that combines both into a single score, the *F-measure*. The harmonic mean between sensitivity and precision bounded between zero and one.  This measure can be modified by a positive integer weighting factor, *beta* (3), where a weight greater than one favors sensitivity and a weight less than one favors precision[12].   When an F-measure's beta equals one, it indicates a perfect balance between these metrics(4-6).
+
+
+![F-beta score formula](./images/fbeta_formula.png)
 
