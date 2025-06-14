@@ -3,7 +3,7 @@ Adaptive Prediction Thresholding for Classifiers in Deployment (APTCID)
 
 **We propose a post-training probability threshold recalibration procedure for probabilistic binary or multi-label classifier algorithms in deployment: Adaptive Prediction Thresholding for Classifiers in Deployment (APTCID).  APTCID serves several purposes: it mitigates the burden of updating the model, it maintains goal-driven relevant evaluation metrics (here clinical metrics), and it provides the opportunity to automatically update prediction thresholds and monitors changes in performance.**
 
-![Schematic for Threshold Optimization](Slide54.jpg)
+![Schematic for Threshold Optimization](Images/Slide54.jpg)
 
 Schematics describing the process of threshold optimization and recalibration.  
 - **Step I** Stratification variables, timestamps, prediction probabilities, and outcomes are fed into the pipeline.
@@ -37,7 +37,7 @@ $Recall(t) = \frac{TP_t}{TP_t + FN_t} \tag{2}$
 While one might propose threshold optimization and recalibration that imposes tolerances to achieve professional expectations of the above metrics individually, there is an established scoring metric that combines both into a single score, the *F-measure*. The harmonic mean between sensitivity and precision bounded between zero and one.  This measure can be modified by a positive integer weighting factor, *beta*, where a weight greater than one favors sensitivity and a weight less than one favors precision[12].   When an F-measure's beta equals one, it indicates a perfect balance between these metrics.
 
 
-![F-beta score formula](eqs.jpg)
+![F-beta score formula](Images/eqs.jpg)
 
 The class imbalance perspective generally rules out the use of *accuracy* alone as a reliable metric[7-10].  Intuitively, an evaluation metric that includes the true negative (*TN*) count skews the predictive performance of a class imbalanced dataset, and this skew increases as the number of true positives decreases.
 
@@ -45,15 +45,15 @@ $accuracy(t) = \frac{TP_t + TN_t}{TP_t + TN_t + FP_t + FN_t}$
 
 **GHOST**.  The Generalized tHreshOld ShifTing procedure (GHOST) is a threshold “shifting” method developed by Esposito et al to help with model selection based on optimized performance[11].  GHOST can briefly be described in four key steps: perform bootstrap stratified sampling, scan decision thresholds over some range, compute evaluation metrics for each threshold, and select the threshold for optimal performance either by minimizing or maximizing a scoring metric.  In Esposito et al’s 2021 paper, they chose Cohen's kappa as their metric to maximize.  Cohen’s kappa measures a model’s performance relative to random assignment[12]. 
 
-![random accuracy](random_accuracy.jpg)
+![random accuracy](Images/random_accuracy.jpg)
 
-![cohens kappa](cohens_kappa.jpg)
+![cohens kappa](Images/cohens_kappa.jpg)
 
 Analogous to GHOST and alluded to above, **APTCID** performs a bootstrap stratified sampling...it follows that our objective function selects the threshold that maximizes the median Recall weighted *F-measure*. 
 
-![objective function](max_med_fbeta.jpg)
+![objective function](Images/max_med_fbeta.jpg)
 
-![Threshold Optimization](Algo1.jpg)
+![Threshold Optimization](Images/Algo1.jpg)
 
 **Pseudocode for a Generalized Threshold Optimization Procedure.**  First, we define our inputs.  The prediction probability ($p_p$), predicted outcome ($T_p$), and actual outcome ($T_a$) variables are used to generate random stratified subsets from the data.  Subsets are scanned across thresholds and clinical metrics, $CM_t$, are calculated for each threshold.  We choose the topt from the maximum median F-beta score.
 
@@ -61,7 +61,7 @@ As proof-of-concept, we apply APTCID to the test set.  Test is a six-month windo
 
 Exactly when it is appropriate to recalibrate the prediction threshold should be driven by clinical professionals.  Just to reiterate, the first concern is model safety and preserving patient health and well-being.  The recalibration algorithm enables user-defined cut-off values for the model’s recall performance, and we can guide the recalibration empirically using a performance tolerance measure.  Simply put, tolerance is the tolerable percent change in performance from one interval to the next.  For this study’s proof of concept, we set this tolerance to 0.01 and restrict its use to scenarios where the difference is negative indicating a performance drop from intervalt to intervalt+1.  After the threshold has been optimized for performance, we move on to the next interval using the new threshold for prediction. 
 
-![Recalibration Trigger](Algo2.jpg)
+![Recalibration Trigger](Images/Algo2.jpg)
 
 **Recalibration Trigger Algorithm.** We define several variables.  Delta, lambda, epsilon, gamma, and sigma are user-defined acceptable performance parameters, a lookback window and its size, respectively.  For some data, Dx, we compute evaluation metrics, mx, and assess whether Dx performance is sub-optimal.  If so, we check whether the percent change in recall from Dx-1 is greater than our performance tolerance, delta. If true, we run the Threshold Optimization algorithm. 
 
